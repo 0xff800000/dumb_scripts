@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 get_random_str() {
 	eval "$1='$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 10)'"
@@ -9,19 +9,28 @@ get_path() {
 }
 
 # Root dir
-#cd /
-cd .
+start_path=*
+current_layer=(*)
+maxdepth=3
+if [[ $# == 1 ]]
+then
+		current_layer=($1)
+elif [[ $# == 2 ]]
+then
+		maxdepth=$2
+		current_layer=($1)
+else
+		current_layer=($start_path)
+fi
 
-current_layer=(/*)
 next_layer=()
 rand_str=''
-maxdepth=3
 get_random_str rand_str
 echo $rand_str
 
 echo $current_layer
 
-for n in {0..4}
+for n in $(seq 1 $maxdepth)
 do
 		echo $n
 
@@ -62,4 +71,3 @@ do
 done
 
 
-echo ${next_layer[@]}
